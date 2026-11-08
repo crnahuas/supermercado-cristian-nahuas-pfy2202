@@ -1,0 +1,30 @@
+.helpStrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding-top: 24px;
+  padding-bottom: 62px;
+}
+.helpStrip h2 {
+  font-size: 22px;
+  letter-spacing: -0.5px;
+}
+.helpStrip p {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.8;
+  margin-top: 9px;
+}
+@media (max-width: 700px) {
+  .helpStrip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 17px;
+    padding-top: 25px;
+    padding-bottom: 40px;
+  }
+  .helpStrip h2 {
+    font-size: 21px;
+  }
+}

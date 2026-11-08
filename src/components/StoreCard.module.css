@@ -1,0 +1,91 @@
+.storeRow {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  padding: 30px 26px;
+}
+.storeName h2 {
+  color: var(--accent);
+  font-size: 24px;
+  letter-spacing: -0.8px;
+  margin-bottom: 18px;
+}
+.storeRow p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--muted);
+}
+.storeName {
+  min-height: 160px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
+  padding-bottom: 22px;
+}
+.detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+.detail svg {
+  margin-top: 5px;
+  color: var(--accent);
+}
+.storeHours h3,
+.storeServices h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  margin-bottom: 12px;
+}
+.storeServices {
+  margin-top: 24px;
+}
+.storeServices ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.8;
+}
+.storeServices li + li {
+  margin-top: 4px;
+}
+.fieldHint {
+  display: block;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin-top: 12px;
+}
+.directions:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+@media (max-width: 1050px) {
+  .storeRow {
+    padding: 26px 20px;
+  }
+  .storeName h2 {
+    font-size: 22px;
+  }
+  .storeName {
+    min-height: 186px;
+  }
+}
+@media (max-width: 700px) {
+  .storeRow {
+    padding: 26px;
+  }
+  .storeName {
+    min-height: 0;
+  }
+  .storeName h2 {
+    font-size: 25px;
+  }
+}

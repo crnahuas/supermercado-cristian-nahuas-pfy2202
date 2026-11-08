@@ -1,0 +1,33 @@
+.faqLayout {
+  padding-top: 44px;
+  padding-bottom: 56px;
+}
+.questions {
+  max-width: 960px;
+  margin-inline: auto;
+}
+.faqHelp {
+  max-width: 960px;
+  margin: 28px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.faqHelp p {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+@media (max-width: 700px) {
+  .faqLayout {
+    padding-block: 30px 40px;
+  }
+  .faqHelp {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

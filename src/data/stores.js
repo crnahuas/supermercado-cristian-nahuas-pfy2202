@@ -1,0 +1,32 @@
+export const stores = [
+  {
+    number: "01",
+    name: "Santiago Centro",
+    type: "Casa matriz",
+    address: "Av. Libertador Bernardo O’Higgins 1450",
+    commune: "Santiago",
+    hours: "Lunes a sábado · 08:30 a 20:30",
+    sunday: "Domingos · 09:00 a 15:00",
+    services: "Sala de ventas · Atención al cliente · Retiro de pedidos",
+  },
+  {
+    number: "02",
+    name: "Providencia",
+    type: "Sucursal",
+    address: "Av. Providencia 2150",
+    commune: "Providencia",
+    hours: "Lunes a sábado · 09:00 a 21:00",
+    sunday: "Domingos · 09:00 a 16:00",
+    services: "Sala de ventas · Atención al cliente",
+  },
+  {
+    number: "03",
+    name: "Ñuñoa",
+    type: "Sucursal",
+    address: "Av. Irarrázaval 3200",
+    commune: "Ñuñoa",
+    hours: "Lunes a sábado · 08:30 a 20:30",
+    sunday: "Domingos · 09:00 a 15:00",
+    services: "Sala de ventas · Atención al cliente · Retiro de pedidos",
+  },
+];

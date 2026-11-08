@@ -1,0 +1,94 @@
+/* Tailwind comparte la paleta global con los componentes públicos.
+   Se omite Preflight para conservar los estilos base existentes. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "./global.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+@source "../";
+
+@theme {
+  --color-abasto: var(--teal);
+  --color-abasto-dark: var(--evergreen);
+  --color-sage: var(--linen);
+  --color-ink: var(--ink);
+  --color-danger: var(--danger);
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-lime: var(--lime);
+  --color-lime-hover: var(--lime-hover);
+  --color-danger-surface: var(--danger-surface);
+  --color-danger-line: var(--danger-line);
+}
+
+@layer components {
+  .surface-card {
+    @apply rounded border border-solid border-line bg-surface;
+  }
+
+  .button-primary {
+    @apply inline-flex min-h-12 cursor-pointer items-center justify-center gap-2.5 rounded border border-solid border-transparent bg-lime px-5 py-3 text-[15px] font-[650] leading-[1.6] text-ink transition-colors hover:bg-lime-hover;
+  }
+
+  .form-field {
+    @apply mt-2.5 block min-h-13 w-full rounded border border-solid border-line-strong bg-surface px-[15px] py-[13px] text-base leading-[1.7] text-ink transition-colors placeholder:text-muted placeholder:opacity-100 focus:border-abasto focus:outline-2 focus:outline-offset-2 focus:outline-abasto aria-invalid:border-danger aria-invalid:bg-danger-surface;
+  }
+
+  .data-table {
+    @apply w-full table-fixed border-collapse text-left text-sm;
+
+    & thead {
+      @apply bg-sage;
+    }
+
+    & thead th {
+      @apply border-0 border-y border-solid border-line px-2 py-3.5 text-sm font-[650] text-muted sm:px-7 sm:py-4 sm:text-[15px];
+    }
+
+    & tbody th,
+    & tbody td {
+      @apply border-0 border-0 border-b border-solid border-line p-[18px] text-base leading-[1.7] wrap-anywhere text-muted sm:px-7 sm:py-[21px];
+    }
+
+    & tbody tr:last-child > * {
+      @apply border-b-0;
+    }
+
+    & tbody tr:hover {
+      @apply bg-surface-hover;
+    }
+  }
+}
+
+@layer components {
+  .button-primary:disabled {
+    @apply cursor-not-allowed border-line bg-sage text-muted opacity-75;
+  }
+  .text-button {
+    @apply cursor-pointer border-0 bg-transparent p-0 text-sm font-semibold text-abasto hover:underline hover:underline-offset-4;
+  }
+  .product-link {
+    @apply font-semibold text-abasto underline decoration-line-strong underline-offset-4 transition-colors hover:text-abasto-dark hover:decoration-abasto;
+  }
+  .stock-badge {
+    @apply inline-flex items-center rounded px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap tabular-nums;
+  }
+  .quantity-button {
+    @apply inline-flex size-11 cursor-pointer items-center justify-center rounded border-0 bg-sage text-xl font-semibold text-abasto hover:bg-line disabled:cursor-not-allowed disabled:bg-surface disabled:text-muted disabled:opacity-50;
+  }
+  .cart-line {
+    @apply flex flex-wrap items-center gap-6 border-0 border-b border-solid border-line px-5 py-6 last:border-b-0 sm:px-7;
+  }
+  .detail-grid {
+    @apply m-0 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2;
+    & dt {
+      @apply text-sm text-muted;
+    }
+    & dd {
+      @apply m-0 mt-1.5 font-semibold wrap-anywhere text-ink;
+    }
+  }
+}

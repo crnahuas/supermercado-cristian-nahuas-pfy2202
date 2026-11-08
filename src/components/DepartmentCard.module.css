@@ -1,0 +1,33 @@
+.departmentImage {
+  aspect-ratio: 1.45;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--sage);
+}
+.departmentImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.department h3 {
+  margin-top: 22px;
+  font-size: 23px;
+  letter-spacing: -0.8px;
+}
+.department p {
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--muted);
+  margin-top: 9px;
+  max-width: 330px;
+}
+@media (max-width: 700px) {
+  .departmentImage {
+    aspect-ratio: 1.65;
+    border-radius: 4px;
+  }
+  .department h3 {
+    font-size: 22px;
+    margin-top: 16px;
+  }
+}

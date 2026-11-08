@@ -1,0 +1,19 @@
+.notFound {
+  max-width: 900px;
+  padding: 100px 48px;
+  margin: auto;
+}
+.notFound p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin: 24px 0;
+}
+@media (max-width: 700px) {
+  .notFound {
+    padding: 60px 22px;
+  }
+  .notFound h1 {
+    font-size: 42px;
+  }
+}
