@@ -1,5 +1,7 @@
 # Supermercado Abasto
 
+[Visitar Abasto](https://crnahuas.github.io/supermercado-cristian-nahuas-pfy2202/) · [Repositorio en GitHub](https://github.com/crnahuas/supermercado-cristian-nahuas-pfy2202)
+
 Sitio web de un supermercado con gestión de inventario y carrito de compras. Permite registrar artículos con sus cantidades, filtrar por categoría, consultar un producto y reservar unidades en el carrito. Las existencias se actualizan en todas las pantallas al modificar una reserva.
 
 Desarrollado con React 18, React Router 7, Vite 8 y Tailwind CSS 4. Mantiene las páginas de inicio, tiendas y preguntas frecuentes de la versión anterior.
@@ -98,23 +100,23 @@ El diseño adapta la navegación, las tarjetas y los controles a pantallas peque
 
 ## Publicar en GitHub Pages
 
-Nombre del repositorio: `supermercado-cristian-nahuas-pfy2202`.
+El repositorio `supermercado-cristian-nahuas-pfy2202` está publicado y tiene GitHub Pages configurado mediante GitHub Actions.
 
 El flujo `.github/workflows/pages.yml` instala las dependencias desde el lockfile, ejecuta las pruebas, compila y publica `dist/`. El despliegue se ejecuta al subir cambios a `main` o manualmente desde **Actions**. No requiere claves personales en el código.
 
-Para la primera publicación:
+Para reproducir la configuración en otro repositorio:
 
 1. Crea el repositorio con el nombre indicado y sube el contenido de esta carpeta a `main`, incluyendo archivos ocultos, `public/`, `tests/` y `evidencias/`. Excluye `node_modules/` y `dist/`, ya cubiertos por `.gitignore`.
 2. En el repositorio abre **Settings → Pages → Build and deployment → Source** y selecciona **GitHub Actions**.
 3. Ejecuta el flujo **Publicar Abasto** desde **Actions → Run workflow** si el primer envío ocurrió antes de habilitar Pages.
 4. Comprueba que los trabajos `build` y `deploy` terminen correctamente y abre el enlace que informa el entorno `github-pages`.
 
-Se utiliza `HashRouter`, `base: "./"` y recursos relativos para permitir enlaces directos y recargas dentro de un subdirectorio de GitHub Pages, sin reglas adicionales de servidor. La URL final la confirma el despliegue; disponer del flujo no significa que el sitio ya esté publicado.
+Se utiliza `HashRouter`, `base: "./"` y recursos relativos para permitir enlaces directos y recargas dentro de un subdirectorio de GitHub Pages, sin reglas adicionales de servidor. El entorno `github-pages` de Actions informa el resultado y la dirección de cada publicación.
 
 ## Verificación
 
 La suite comprueba navegación pública y de gestión, validación y registro, filtro sin pérdida de artículos, detalle dinámico, carrito sin duplicados, devolución de unidades, límites de stock, acciones consecutivas, persistencia, migración y recuperación de datos dañados.
 
-Las capturas de `evidencias/capturas/` muestran el inventario completo, el filtro aplicado, el detalle agotado y el carrito en escritorio y móvil. Los productos de las capturas se registraron durante la revisión; no están precargados en el código.
+Las capturas de [evidencias/capturas/](evidencias/capturas/) muestran el inventario completo, el filtro aplicado, el detalle agotado y el carrito en escritorio y móvil. Los productos de las capturas se registraron durante la revisión; no están precargados en el código.
 
 Referencias técnicas: [estado con reducer en React](https://react.dev/learn/extracting-state-logic-into-a-reducer), [rutas de React Router 7](https://reactrouter.com/7.18.5/start/declarative/routing), [tema de Tailwind CSS](https://tailwindcss.com/docs/theme) y [flujos de GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
