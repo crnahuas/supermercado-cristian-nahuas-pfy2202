@@ -101,18 +101,34 @@ export default function Cart() {
             <p className="font-semibold">
               Total: {cartCount} {cartCount === 1 ? "unidad" : "unidades"}
             </p>
-            <button
-              type="button"
-              className="text-button min-h-11 text-danger"
-              onClick={() => {
-                clearCart();
-                setMessage(
-                  "Se vació el carrito. Todas las unidades volvieron al inventario.",
-                );
-              }}
-            >
-              Vaciar carrito
-            </button>
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:items-end">
+              <div className="flex flex-wrap items-center gap-5">
+                <button
+                  type="button"
+                  className="text-button min-h-11 text-danger"
+                  onClick={() => {
+                    clearCart();
+                    setMessage(
+                      "Se vació el carrito. Todas las unidades volvieron al inventario.",
+                    );
+                  }}
+                >
+                  Vaciar carrito
+                </button>
+                <button
+                  type="button"
+                  className="button-primary max-sm:w-full"
+                  disabled
+                  aria-describedby="checkout-unavailable"
+                >
+                  <Icon name="cart" size={18} />
+                  Comprar
+                </button>
+              </div>
+              <p id="checkout-unavailable" className="text-sm text-muted">
+                La compra en línea aún no está disponible.
+              </p>
+            </div>
           </div>
         </section>
       )}

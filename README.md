@@ -73,7 +73,7 @@ Inventario y carrito se guardan juntos en `localStorage` con la clave `abasto.in
 
 Si existe la clave anterior `abasto.inventory.v1` y todavía no hay datos de la nueva versión, cada registro válido se importa con **una unidad inicial**, porque antes no se registraban cantidades. La clave anterior permanece intacta.
 
-Los datos pertenecen al navegador y al origen utilizado; cambiar de puerto o abrir el sitio publicado utiliza otro almacenamiento. No se sincronizan entre dispositivos ni pestañas. Si el navegador impide guardar, aparece un aviso y la sesión sigue funcionando en memoria. El inventario comienza vacío cuando no hay datos previos. El carrito reserva unidades; no procesa pagos ni completa ventas.
+Los datos pertenecen al navegador y al origen utilizado; cambiar de puerto o abrir el sitio publicado utiliza otro almacenamiento. No se sincronizan entre dispositivos ni pestañas. Si el navegador impide guardar, aparece un aviso y la sesión sigue funcionando en memoria. El inventario comienza vacío cuando no hay datos previos. El carrito reserva unidades; no procesa pagos ni completa ventas. Cuando contiene productos, muestra el botón **Comprar** desactivado y un aviso de que la compra en línea aún no está disponible. Es un complemento visual; las instrucciones de la semana 3 no solicitan finalizar compras.
 
 ## Organización
 

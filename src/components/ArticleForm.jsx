@@ -10,6 +10,7 @@ const createEmptyValues = () => ({ name: "", brand: "", type: "", stock: "" });
 export default function ArticleForm() {
   const { addArticle } = useInventory();
   const [values, setValues] = useState(createEmptyValues);
+  const [editedFields, setEditedFields] = useState({});
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
   const [savedName, setSavedName] = useState("");
@@ -18,6 +19,7 @@ export default function ArticleForm() {
   function handleChange(event) {
     const { name, value } = event.target;
     setValues((current) => ({ ...current, [name]: value }));
+    setEditedFields((current) => ({ ...current, [name]: true }));
     setErrors((current) => ({ ...current, [name]: undefined }));
     setSavedName("");
     setSubmitError("");
@@ -37,6 +39,7 @@ export default function ArticleForm() {
     }
     setSavedName(result.article.name);
     setValues(createEmptyValues());
+    setEditedFields({});
     formRef.current.elements.namedItem("name")?.focus();
   }
 
@@ -75,11 +78,13 @@ export default function ArticleForm() {
             name: key,
             value: values[key],
             onChange: handleChange,
-            onBlur: () =>
+            onBlur: () => {
+              if (!editedFields[key] && !errors[key]) return;
               setErrors((current) => ({
                 ...current,
                 [key]: validateArticle(values)[key],
-              })),
+              }));
+            },
             required: true,
             "aria-invalid": Boolean(errors[key]),
             "aria-describedby": errors[key]

@@ -102,6 +102,33 @@ describe("Inventario y carrito", () => {
     expect(screen.getByRole("status").textContent).toContain("Leche");
   });
 
+  it("permite ver el inventario después de guardar sin validar el formulario recién vaciado", () => {
+    openPage("/inventario/nuevo");
+    fillArticle();
+    const name = screen.getByLabelText("Nombre del artículo");
+    const inventoryLink = screen.getByRole("link", {
+      name: "Ver inventario →",
+    });
+
+    fireEvent.blur(name, { relatedTarget: inventoryLink });
+    expect(screen.queryByRole("alert")).toBe(null);
+    expect(screen.getByRole("status").textContent).toContain("Leche entera");
+    fireEvent.click(inventoryLink);
+    expect(table().getByText("Leche entera")).toBeTruthy();
+  });
+
+  it("valida al salir de un campo editado aunque se haya guardado un artículo antes", () => {
+    openPage("/inventario/nuevo");
+    fillArticle();
+    const name = screen.getByLabelText("Nombre del artículo");
+    fireEvent.change(name, { target: { value: "Arroz" } });
+    fireEvent.change(name, { target: { value: "" } });
+    fireEvent.blur(name);
+    expect(screen.getByRole("alert").textContent).toBe(
+      "Ingresa el nombre del artículo.",
+    );
+  });
+
   it("filtra dinámicamente, conserva el inventario completo y abre el detalle del producto", async () => {
     seed();
     openPage();
