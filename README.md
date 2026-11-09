@@ -1,122 +1,134 @@
 # Supermercado Abasto
 
-[Visitar Abasto](https://crnahuas.github.io/supermercado-cristian-nahuas-pfy2202/) · [Repositorio en GitHub](https://github.com/crnahuas/supermercado-cristian-nahuas-pfy2202)
+Abasto es un sitio de supermercado que reúne información de sus tiendas y una sección para gestionar productos. Permite registrar artículos, consultar las existencias, filtrar por categoría y reservar unidades en un carrito. Las cantidades disponibles se actualizan al agregar o devolver productos.
 
-Sitio web de un supermercado con gestión de inventario y carrito de compras. Permite registrar artículos con sus cantidades, filtrar por categoría, consultar un producto y reservar unidades en el carrito. Las existencias se actualizan en todas las pantallas al modificar una reserva.
+[Visitar Abasto](https://crnahuas.github.io/supermercado-cristian-nahuas-pfy2202/)
 
-Desarrollado con React 18, React Router 7, Vite 8 y Tailwind CSS 4. Mantiene las páginas de inicio, tiendas y preguntas frecuentes de la versión anterior.
+## Qué puedes hacer en el sitio
 
-## Ejecutar el proyecto
+El sitio tiene dos áreas:
 
-Requiere Node.js 24.15 o superior en la rama 24 y npm.
+- **Información del supermercado:** desde Inicio puedes conocer sus secciones, consultar las direcciones y los horarios en Nuestras tiendas y revisar las Preguntas frecuentes.
+- **Gestión de inventario:** permite ingresar artículos, revisar sus cantidades y administrar las unidades que se agregan al carrito.
 
-Desde esta carpeta:
+Para comenzar a gestionar productos, selecciona **Gestión de inventario** desde la página de inicio. Dentro de esta sección encontrarás los accesos a **Inventario**, **Ingresar artículo** y **Carrito**.
+
+## Registrar un artículo
+
+1. Selecciona **Ingresar artículo**.
+2. Completa el nombre, la marca, el tipo de producto y la cantidad inicial.
+3. Pulsa **Guardar artículo**.
+4. Cuando aparezca la confirmación, puedes ingresar otro producto o seleccionar **Ver inventario** para consultar el listado.
+
+Por ejemplo, puedes registrar **Leche entera 1 L**, marca **Colun**, categoría **Lácteos**, con una cantidad inicial de **12** unidades.
+
+Todos los campos son obligatorios. Nombre y marca admiten hasta 100 caracteres y deben comenzar con una letra o un número. Aceptan tildes, espacios y signos habituales de nombres comerciales. La categoría se elige de la lista y la cantidad inicial debe ser un número entero entre **0 y 999999**.
+
+Si un dato no es válido, aparece un mensaje junto al campo para indicar qué debes corregir. Si el registro falla, el formulario conserva los datos para que puedas reintentarlo. Después de guardar correctamente, los campos quedan vacíos y listos para un nuevo artículo.
+
+## Consultar y filtrar el inventario
+
+La pantalla **Inventario** muestra un resumen con la cantidad de artículos registrados, las unidades disponibles y las unidades reservadas en el carrito.
+
+En el listado puedes consultar:
+
+| Dato | Qué representa |
+| --- | --- |
+| Nombre | Identifica el producto y permite abrir su detalle. |
+| Marca | Indica la marca registrada para ese artículo. |
+| Tipo de producto | Corresponde a su categoría, como Abarrotes, Bebidas o Lácteos. |
+| Disponibles | Son las unidades que todavía puedes agregar al carrito. |
+| En carrito | Son las unidades de ese producto que ya están reservadas. |
+
+Para ver una categoría, selecciónala en **Filtrar por categoría**. El listado se actualiza de inmediato y muestra cuántos artículos coinciden. El resto del inventario se conserva; selecciona **Todas las categorías** o pulsa **Quitar filtro** para volver a verlo completo.
+
+Si no hay productos registrados, aparece un acceso para agregar el primero. Si una categoría no tiene artículos, puedes elegir otra o quitar el filtro.
+
+## Ver un producto y agregarlo al carrito
+
+Selecciona el nombre de un artículo en el inventario para abrir su detalle. Allí encontrarás su nombre, marca, categoría, cantidad registrada, unidades disponibles y unidades en el carrito.
+
+Cada pulsación en **Agregar al carrito** reserva **una unidad** y reduce la disponibilidad del producto. Si lo agregas varias veces, se acumula su cantidad en una sola línea del carrito.
+
+Cuando se agotan las unidades disponibles, el producto sigue visible con la indicación **Agotado · 0** y el botón para agregarlo queda desactivado. Puedes continuar desde **Ver carrito** o regresar al inventario.
+
+## Administrar el carrito
+
+El **Carrito** muestra los productos reservados, su marca, categoría y disponibilidad restante. Desde esta pantalla puedes realizar las siguientes acciones:
+
+| Control | Qué hace |
+| --- | --- |
+| **+** | Agrega una unidad y la descuenta de la disponibilidad. Se desactiva cuando no quedan unidades. |
+| **−** | Devuelve una unidad al inventario. Si era la última del producto en el carrito, se retira esa línea. |
+| **Quitar** | Retira todas las unidades de ese producto del carrito y las devuelve al inventario. |
+| **Vaciar carrito** | Retira todos los productos del carrito y devuelve sus unidades al inventario. |
+| **Seguir agregando artículos** | Abre el inventario para consultar otros productos. |
+
+El total del carrito corresponde al **número de unidades reservadas**. Por ejemplo, dos unidades de leche y una de arroz suman tres unidades, aunque sean dos productos diferentes.
+
+El botón **Comprar** aparece desactivado cuando el carrito contiene productos. La compra en línea aún no está disponible: el sitio permite gestionar reservas, pero no procesa pagos ni confirma ventas.
+
+## Cómo se actualizan las cantidades
+
+La cantidad registrada de un producto se distribuye entre las unidades disponibles y las reservadas en el carrito. Por ejemplo, si registras 12 unidades de leche:
+
+| Acción | Disponibles | En carrito |
+| --- | ---: | ---: |
+| Registrar el producto | 12 | 0 |
+| Agregar tres unidades al carrito | 9 | 3 |
+| Devolver una unidad con **−** | 10 | 2 |
+| Quitar el producto del carrito | 12 | 0 |
+
+El inventario, el detalle y el carrito muestran las mismas cantidades. Filtrar una categoría no cambia las existencias ni las reservas.
+
+## Cómo se guardan los datos
+
+El inventario comienza vacío cuando no hay datos anteriores. Los productos que registres y las reservas del carrito se guardan en el navegador y se recuperan al recargar o volver a abrir el sitio.
+
+Los datos pertenecen al navegador y a la dirección donde se utiliza la aplicación. Abrirla en otro navegador, dispositivo o dirección puede mostrar un inventario diferente. No hay sincronización automática entre dispositivos ni entre pestañas abiertas. Borrar los datos del sitio en el navegador también elimina el inventario guardado.
+
+Si el navegador no permite guardar, el sitio muestra un aviso y puedes seguir trabajando durante la sesión, aunque los cambios podrían perderse al recargar.
+
+## Uso en celulares
+
+La navegación, los formularios y el carrito se adaptan al ancho de la pantalla. En el inventario puedes **deslizar la tabla horizontalmente** para consultar las columnas que no caben a la vez.
+
+Los campos tienen etiquetas y mensajes de error. Las confirmaciones de registro y los cambios del carrito también se anuncian a las herramientas de lectura de pantalla.
+
+## Capturas del sitio
+
+Las imágenes muestran una demostración con productos y marcas reconocibles. Estos ejemplos no se cargan automáticamente al abrir la aplicación.
+
+| Pantalla | Vista |
+| --- | --- |
+| Inventario completo | [Ver captura](evidencias/capturas/01-inventario.png) |
+| Filtro por categoría | [Ver captura](evidencias/capturas/02-filtro-categoria.png) |
+| Detalle de un producto agotado | [Ver captura](evidencias/capturas/03-detalle-articulo.png) |
+| Carrito de compras | [Ver captura](evidencias/capturas/04-carrito.png) |
+| Carrito en celular | [Ver captura](evidencias/capturas/05-carrito-movil.png) |
+| Inventario en celular | [Ver captura](evidencias/capturas/06-inventario-movil.png) |
+| Confirmación de registro | [Ver captura](evidencias/capturas/07-registro-exitoso.png) |
+| Mensajes del formulario | [Ver captura](evidencias/capturas/08-validacion-formulario.png) |
+
+## Ejecutar en tu equipo
+
+Se recomienda **Node.js 24.15 o superior dentro de la rama 24**, junto con npm.
+
+Desde la carpeta del proyecto, instala las dependencias e inicia el servidor:
 
 ```bash
 npm ci
 npm run dev
 ```
 
-Abre la dirección que muestra Vite, normalmente `http://127.0.0.1:5173/`. También puedes ejecutar `npm start`.
+Abre la dirección que aparece en la terminal, normalmente `http://127.0.0.1:5173/`. También puedes iniciar el servidor con `npm start`.
 
-```bash
-npm test          # Pruebas de navegación, formulario, inventario y carrito
-npm run build    # Genera dist/ para producción
-npm run preview  # Revisa la compilación localmente
-```
+Comandos adicionales:
 
-## Pantallas
+| Comando | Función |
+| --- | --- |
+| `npm test` | Ejecuta las pruebas del sitio, los formularios, el inventario y el carrito. |
+| `npm run build` | Genera la versión de producción en la carpeta `dist/`. |
+| `npm run preview` | Permite revisar localmente la versión de producción después de compilarla. |
 
-| Ruta                                 | Contenido                                                             |
-| ------------------------------------ | --------------------------------------------------------------------- |
-| `/#/`                                | Inicio y secciones del supermercado.                                  |
-| `/#/nuestras-tiendas`                | Direcciones, horarios y servicios.                                    |
-| `/#/preguntas-frecuentes`            | Preguntas y respuestas.                                               |
-| `/#/inventario`                      | Nombre, marca, categoría, unidades disponibles y unidades en carrito. |
-| `/#/inventario/nuevo`                | Registro de artículos y su cantidad inicial.                          |
-| `/#/inventario/articulos/:articleId` | Detalle de un producto y botón para agregar una unidad al carrito.    |
-| `/#/inventario/carrito`              | Productos reservados y controles de cantidad.                         |
-
-Las rutas de inventario están anidadas y comparten un layout. El detalle utiliza un parámetro dinámico; detalle y carrito se cargan bajo demanda con `React.lazy` y `Suspense`. Las rutas desconocidas y los artículos inexistentes tienen una pantalla de recuperación.
-
-## Uso del inventario y carrito
-
-1. Entra a **Gestión de inventario** y selecciona **Ingresar artículo**.
-2. Completa nombre, marca, tipo de producto y cantidad inicial. Guarda el artículo. El formulario confirma el registro y queda listo para ingresar otro.
-3. Abre **Inventario**. Selecciona una categoría para filtrar; **Todas las categorías** o **Quitar filtro** recuperan el listado completo.
-4. Selecciona el nombre de un artículo para ver su detalle. **Agregar al carrito** reserva una unidad por pulsación y reduce las unidades disponibles.
-5. Abre **Carrito**. Usa `+` y `−` para ajustar cantidades. Al disminuir la última unidad se elimina esa línea. **Quitar** devuelve todas las unidades del producto y **Vaciar carrito** devuelve las de todo el carrito.
-
-Un producto agotado permanece visible con la indicación **Agotado · 0**, pero no permite nuevas reservas. El botón `+` se deshabilita cuando no queda stock. No se pueden guardar cantidades negativas, fraccionarias o superiores a las existencias registradas.
-
-El filtro usa el parámetro `categoria` en la URL y calcula una lista derivada, sin modificar los artículos originales. Por ejemplo: `/#/inventario?categoria=L%C3%A1cteos`. El historial del navegador permite regresar al listado filtrado.
-
-## Validación
-
-Todos los campos son obligatorios. Nombre y marca aceptan hasta 100 caracteres, tildes, números y signos de uso comercial; deben comenzar con una letra o número. La categoría debe pertenecer al catálogo. La cantidad inicial admite enteros entre 0 y 999999.
-
-Los datos se normalizan y validan con el mismo esquema al registrar y recuperar artículos. Los errores se muestran junto al campo y el envío enfoca el primer error. Si el registro falla, los valores se conservan para reintentar.
-
-## Estado y almacenamiento
-
-`InventoryProvider` comparte inventario y carrito mediante Context y `useReducer`. El reducer concentra las transiciones y valida los límites usando el estado más reciente, incluso si se reciben varias acciones en un mismo evento. Las operaciones crean nuevos arrays y objetos.
-
-Por cada producto se guarda la cantidad registrada (`stock`) y, en el carrito, la cantidad reservada (`quantity`). Las pantallas calculan:
-
-```text
-unidades disponibles = stock registrado − unidades en carrito
-```
-
-Así, al agregar al carrito se descuentan existencias y al devolver una unidad se recupera disponibilidad. El filtro y los contadores son datos derivados; no duplican el estado del inventario.
-
-Inventario y carrito se guardan juntos en `localStorage` con la clave `abasto.inventory.v2`. Al recargar, se recupera la misma reserva. Los identificadores repetidos, artículos inválidos y reservas sin producto, fraccionarias o superiores al stock se descartan al leerlos.
-
-Si existe la clave anterior `abasto.inventory.v1` y todavía no hay datos de la nueva versión, cada registro válido se importa con **una unidad inicial**, porque antes no se registraban cantidades. La clave anterior permanece intacta.
-
-Los datos pertenecen al navegador y al origen utilizado; cambiar de puerto o abrir el sitio publicado utiliza otro almacenamiento. No se sincronizan entre dispositivos ni pestañas. Si el navegador impide guardar, aparece un aviso y la sesión sigue funcionando en memoria. El inventario comienza vacío cuando no hay datos previos. El carrito reserva unidades; no procesa pagos ni completa ventas. Cuando contiene productos, muestra el botón **Comprar** desactivado y un aviso de que la compra en línea aún no está disponible. Es un complemento visual; las instrucciones de la semana 3 no solicitan finalizar compras.
-
-## Organización
-
-```text
-src/
-  components/          Formulario, tabla, resumen, stock y controles reutilizables
-  config/navigation.js Rutas, títulos y enlaces
-  context/             Proveedor global de inventario y carrito
-  data/                Reducer, recuperación de datos, validación y catálogos
-  hooks/               Título, desplazamiento y foco al navegar
-  layout/              Estructura pública y layout anidado de inventario
-  pages/               Pantallas públicas, inventario, detalle y carrito
-  routes/AppRoutes.jsx Configuración centralizada de rutas
-  styles/              Paleta global y componentes de Tailwind
-public/                Fotografías e icono del sitio
-tests/                Pruebas con Vitest y Testing Library
-.github/workflows/     Compilación, pruebas y despliegue en GitHub Pages
-evidencias/capturas/  Capturas reales de escritorio y móvil
-```
-
-Tailwind utiliza la paleta de Abasto mediante `@theme`; los patrones repetidos usan `@apply`. Los componentes públicos conservan sus CSS Modules. En Tailwind 4 el tema se configura en CSS y el plugin de Vite detecta las clases utilizadas, por lo que no se necesita `tailwind.config.js`.
-
-El diseño adapta la navegación, las tarjetas y los controles a pantallas pequeñas. La tabla conserva sus columnas dentro de una región con desplazamiento horizontal y acceso por teclado. Los formularios tienen etiquetas y errores asociados; las confirmaciones y los cambios del carrito se anuncian mediante regiones de estado. El salto al contenido mantiene el foco sin alterar las rutas.
-
-## Publicar en GitHub Pages
-
-El repositorio `supermercado-cristian-nahuas-pfy2202` está publicado y tiene GitHub Pages configurado mediante GitHub Actions.
-
-El flujo `.github/workflows/pages.yml` instala las dependencias desde el lockfile, ejecuta las pruebas, compila y publica `dist/`. El despliegue se ejecuta al subir cambios a `main` o manualmente desde **Actions**. No requiere claves personales en el código.
-
-Para reproducir la configuración en otro repositorio:
-
-1. Crea el repositorio con el nombre indicado y sube el contenido de esta carpeta a `main`, incluyendo archivos ocultos, `public/`, `tests/` y `evidencias/`. Excluye `node_modules/` y `dist/`, ya cubiertos por `.gitignore`.
-2. En el repositorio abre **Settings → Pages → Build and deployment → Source** y selecciona **GitHub Actions**.
-3. Ejecuta el flujo **Publicar Abasto** desde **Actions → Run workflow** si el primer envío ocurrió antes de habilitar Pages.
-4. Comprueba que los trabajos `build` y `deploy` terminen correctamente y abre el enlace que informa el entorno `github-pages`.
-
-Se utiliza `HashRouter`, `base: "./"` y recursos relativos para permitir enlaces directos y recargas dentro de un subdirectorio de GitHub Pages, sin reglas adicionales de servidor. El entorno `github-pages` de Actions informa el resultado y la dirección de cada publicación.
-
-## Verificación
-
-La suite comprueba navegación pública y de gestión, validación y registro, filtro sin pérdida de artículos, detalle dinámico, carrito sin duplicados, devolución de unidades, límites de stock, acciones consecutivas, persistencia, migración y recuperación de datos dañados.
-
-Las capturas de [evidencias/capturas/](evidencias/capturas/) muestran el inventario completo, el filtro aplicado, el detalle agotado y el carrito en escritorio y móvil. Los productos de las capturas se registraron durante la revisión; no están precargados en el código.
-
-Referencias técnicas: [estado con reducer en React](https://react.dev/learn/extracting-state-logic-into-a-reducer), [rutas de React Router 7](https://reactrouter.com/7.18.5/start/declarative/routing), [tema de Tailwind CSS](https://tailwindcss.com/docs/theme) y [flujos de GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
+El sitio está desarrollado con **React**, **React Router**, **Vite** y **Tailwind CSS**.
