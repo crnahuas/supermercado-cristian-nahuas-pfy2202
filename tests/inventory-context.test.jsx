@@ -8,10 +8,12 @@ import {
   availableStock,
   emptyInventory,
   inventoryReducer,
+  loadInventory,
   INVENTORY_STORAGE_KEY,
   LEGACY_STORAGE_KEY,
   restoreInventory,
 } from "../src/data/inventoryState.js";
+import { createDemoInventory } from "../src/data/demoInventory.js";
 
 const article = {
   id: "milk",
@@ -87,16 +89,47 @@ describe("Consistencia del stock", () => {
   });
   it("rechaza artículos inválidos en el límite del contexto", () => {
     const { result } = renderHook(useInventory, { wrapper: InventoryProvider });
+    const articlesBefore = result.current.articles;
     let response;
     act(() => {
       response = result.current.addArticle({ ...article, stock: -1 });
     });
     expect(response.ok).toBe(false);
-    expect(result.current.articles).toEqual([]);
+    expect(result.current.articles).toEqual(articlesBefore);
   });
 });
 
 describe("Recuperación y migración", () => {
+  it("inicia con ejemplos válidos y guarda las reservas sin reponerlas al recargar", () => {
+    const demo = createDemoInventory();
+    expect(demo.articles).toHaveLength(8);
+    expect(restoreInventory(demo)).toEqual(demo);
+    const { result, unmount } = renderHook(useInventory, {
+      wrapper: InventoryProvider,
+    });
+    expect(result.current.cartCount).toBe(0);
+    expect(JSON.parse(localStorage.getItem(INVENTORY_STORAGE_KEY))).toEqual(demo);
+    act(() => result.current.adjustCart("demo-jugo", 1));
+    unmount();
+
+    const restored = renderHook(useInventory, { wrapper: InventoryProvider });
+    expect(restored.result.current.articles).toHaveLength(8);
+    expect(restored.result.current.cartCount).toBe(1);
+    expect(restored.result.current.cartItems[0]).toMatchObject({
+      id: "demo-jugo",
+      quantity: 1,
+      available: 0,
+    });
+  });
+  it("crea ejemplos independientes sin compartir artículos ni reservas entre inicios", () => {
+    const first = loadInventory();
+    first.articles[0].stock = 0;
+    first.cart.push({ articleId: "demo-leche", quantity: 1 });
+    const next = loadInventory();
+    expect(next.articles[0].stock).toBe(12);
+    expect(next.cart).toEqual([]);
+    expect(new Set(next.articles.map(({ id }) => id)).size).toBe(8);
+  });
   it("recupera inventario y reservas juntos tras recargar", () => {
     localStorage.setItem(
       INVENTORY_STORAGE_KEY,
@@ -167,6 +200,18 @@ describe("Recuperación y migración", () => {
     );
     const { result } = renderHook(useInventory, { wrapper: InventoryProvider });
     expect(result.current.articles).toEqual([]);
+  });
+  it("respeta un inventario vacío guardado sin cargar ejemplos", () => {
+    localStorage.setItem(INVENTORY_STORAGE_KEY, JSON.stringify(emptyInventory()));
+    expect(loadInventory()).toEqual(emptyInventory());
+  });
+  it("respeta una versión anterior vacía sin cargar ejemplos", () => {
+    localStorage.setItem(LEGACY_STORAGE_KEY, "[]");
+    expect(loadInventory()).toEqual(emptyInventory());
+  });
+  it("no sustituye una versión anterior dañada por ejemplos", () => {
+    localStorage.setItem(LEGACY_STORAGE_KEY, "{dañado");
+    expect(loadInventory()).toEqual(emptyInventory());
   });
   it("mantiene operativa la aplicación si la lectura del navegador falla", () => {
     vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {

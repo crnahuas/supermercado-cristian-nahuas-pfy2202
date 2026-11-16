@@ -1,4 +1,5 @@
 import { parseArticle } from "./articleValidation.js";
+import { createDemoInventory } from "./demoInventory.js";
 
 export const INVENTORY_STORAGE_KEY = "abasto.inventory.v2";
 export const LEGACY_STORAGE_KEY = "abasto.inventory.v1";
@@ -110,7 +111,7 @@ export function loadInventory() {
     if (saved !== null) return restoreInventory(JSON.parse(saved));
     const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
     return legacy === null
-      ? emptyInventory()
+      ? createDemoInventory()
       : restoreInventory(JSON.parse(legacy), { legacy: true });
   } catch {
     return emptyInventory();

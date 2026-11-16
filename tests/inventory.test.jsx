@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import App from "../src/App.jsx";
@@ -63,6 +63,39 @@ const nav = () =>
 const table = () => within(screen.getByRole("table"));
 
 describe("Inventario y carrito", () => {
+  // Los escenarios de registro y estado vacío parten de un inventario
+  // explícitamente guardado, distinto de una primera visita sin datos.
+  beforeEach(() => {
+    localStorage.setItem(
+      INVENTORY_STORAGE_KEY,
+      JSON.stringify({ articles: [], cart: [] }),
+    );
+  });
+
+  it("permite explorar los ejemplos, filtrar y reservar la última unidad desde el primer acceso", async () => {
+    localStorage.clear();
+    openPage();
+    expect(table().getAllByRole("row")).toHaveLength(9);
+    fireEvent.change(screen.getByLabelText("Filtrar por categoría"), {
+      target: { value: "Otros" },
+    });
+    expect(screen.getByText("Sin artículos en esta categoría")).toBeTruthy();
+    fireEvent.change(screen.getByLabelText("Filtrar por categoría"), {
+      target: { value: "Bebidas" },
+    });
+    expect(screen.getByRole("status").textContent).toBe("Mostrando 1 de 8 artículos");
+    fireEvent.click(table().getByRole("link", { name: "Jugo de naranja 1 L" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Agregar al carrito" }));
+    expect(screen.getByRole("button", { name: "Sin unidades disponibles" }).disabled).toBe(true);
+    fireEvent.click(screen.getByRole("link", { name: "Ver carrito →" }));
+    await screen.findByRole("heading", { name: "Carrito de compras" });
+    expect(screen.getByLabelText("Cantidad de Jugo de naranja 1 L").textContent).toBe("1");
+    fireEvent.click(screen.getByRole("button", { name: "Disminuir cantidad de Jugo de naranja 1 L" }));
+    expect(screen.getByText("Tu carrito está vacío")).toBeTruthy();
+    expect(screen.getByRole("status").textContent).toContain("Se devolvió una unidad");
+    expect(JSON.parse(localStorage.getItem(INVENTORY_STORAGE_KEY)).articles).toHaveLength(8);
+  });
+
   it("muestra el estado vacío y permite registrar artículos consecutivos con cantidades", () => {
     const view = openPage();
     expect(screen.getByText("Aún no hay artículos")).toBeTruthy();
@@ -179,6 +212,15 @@ describe("Inventario y carrito", () => {
     fireEvent.click(
       screen.getByRole("button", { name: "Aumentar cantidad de Leche entera" }),
     );
+    expect(screen.getByRole("status").textContent).toBe(
+      "Se agregó una unidad de «Leche entera» al carrito.",
+    );
+    expect(screen.getByRole("status").getAttribute("aria-atomic")).toBe("true");
+    const checkout = screen.getByRole("button", { name: "Comprar" });
+    expect(checkout.disabled).toBe(true);
+    expect(document.getElementById(checkout.getAttribute("aria-describedby")).textContent).toBe(
+      "La compra en línea aún no está disponible.",
+    );
     expect(
       screen.getByRole("button", { name: "Aumentar cantidad de Leche entera" })
         .disabled,
@@ -188,6 +230,9 @@ describe("Inventario y carrito", () => {
       screen.getByRole("button", {
         name: "Disminuir cantidad de Leche entera",
       }),
+    );
+    expect(screen.getByRole("status").textContent).toBe(
+      "Se devolvió una unidad de «Leche entera» al inventario.",
     );
     expect(
       screen.getByRole("button", { name: "Aumentar cantidad de Leche entera" })
@@ -202,6 +247,9 @@ describe("Inventario y carrito", () => {
     fireEvent.click(
       screen.getByRole("button", { name: "Quitar Leche entera" }),
     );
+    expect(screen.getByRole("status").textContent).toBe(
+      "Se quitaron las unidades de «Leche entera» del carrito y volvieron al inventario.",
+    );
     expect(screen.getByText("Tu carrito está vacío")).toBeTruthy();
     fireEvent.click(nav().getByRole("link", { name: "Inventario (3)" }));
     expect(table().getByText("3 unidades")).toBeTruthy();
@@ -212,6 +260,9 @@ describe("Inventario y carrito", () => {
     fireEvent.click(screen.getByRole("link", { name: "Ver carrito →" }));
     await screen.findByRole("heading", { name: "Carrito de compras" });
     fireEvent.click(screen.getByRole("button", { name: "Vaciar carrito" }));
+    expect(screen.getByRole("status").textContent).toBe(
+      "Se vació el carrito. Todas las unidades volvieron al inventario.",
+    );
     expect(screen.getByText("Tu carrito está vacío")).toBeTruthy();
     expect(
       JSON.parse(localStorage.getItem(INVENTORY_STORAGE_KEY)).cart,

@@ -13,6 +13,21 @@ El sitio tiene dos áreas:
 
 Para comenzar a gestionar productos, selecciona **Gestión de inventario** desde la página de inicio. Dentro de esta sección encontrarás los accesos a **Inventario**, **Ingresar artículo** y **Carrito**.
 
+## Probar la demostración
+
+En el primer acceso se cargan **8 artículos de ejemplo**, repartidos en ocho categorías, con **46 unidades disponibles** y el carrito vacío. Puedes probar estos escenarios sin registrar productos:
+
+| Escenario | Pasos y resultado esperado |
+| --- | --- |
+| Listado y filtros | Abre Inventario y elige Lácteos: aparece Leche entera 1 L y el conteo indica 1 de 8 artículos. Quitar filtro recupera los ocho. |
+| Reservas y devolución | Abre Leche entera 1 L y agrega dos unidades. Quedan diez disponibles y dos en el carrito. Usa −, Quitar o Vaciar carrito para devolver unidades. |
+| Última unidad | Abre Jugo de naranja 1 L y reserva su única unidad. El botón para agregar se desactiva. Al devolverla desde el carrito vuelve a estar disponible. |
+| Producto agotado | Abre Pan integral: muestra cero unidades y no permite agregarlo. |
+| Categoría sin resultados | Selecciona Otros: aparece el estado sin artículos y puedes quitar el filtro. |
+| Persistencia | Reserva un producto y recarga la página: se conservan la reserva y su disponibilidad. |
+
+Los ejemplos se cargan únicamente si no existe inventario guardado, ni de la versión actual ni de la anterior. Un inventario existente, incluso vacío, conserva sus datos. Para ver la demostración desde cero puedes abrir el sitio en un perfil nuevo del navegador.
+
 ## Registrar un artículo
 
 1. Selecciona **Ingresar artículo**.
@@ -83,7 +98,7 @@ El inventario, el detalle y el carrito muestran las mismas cantidades. Filtrar u
 
 ## Cómo se guardan los datos
 
-El inventario comienza vacío cuando no hay datos anteriores. Los productos que registres y las reservas del carrito se guardan en el navegador y se recuperan al recargar o volver a abrir el sitio.
+El inventario comienza con los artículos de demostración cuando no hay datos anteriores. Los productos de ejemplo, los que registres y las reservas del carrito se guardan juntos en el navegador y se recuperan al recargar o volver a abrir el sitio. Los registros de la versión anterior se migran con una unidad por artículo, sin añadir ejemplos. Los datos dañados o una lectura bloqueada mantienen la recuperación segura con un inventario vacío, sin incorporar productos de demostración.
 
 Los datos pertenecen al navegador y a la dirección donde se utiliza la aplicación. Abrirla en otro navegador, dispositivo o dirección puede mostrar un inventario diferente. No hay sincronización automática entre dispositivos ni entre pestañas abiertas. Borrar los datos del sitio en el navegador también elimina el inventario guardado.
 
@@ -97,7 +112,7 @@ Los campos tienen etiquetas y mensajes de error. Las confirmaciones de registro 
 
 ## Capturas del sitio
 
-Las imágenes muestran una demostración con productos y marcas reconocibles. Estos ejemplos no se cargan automáticamente al abrir la aplicación.
+Las imágenes muestran una demostración con productos y marcas reconocibles. Las capturas corresponden a una sesión de ejemplo; las cantidades y las reservas pueden diferir de los datos iniciales actuales.
 
 | Pantalla | Vista |
 | --- | --- |
@@ -132,3 +147,31 @@ Comandos adicionales:
 | `npm run preview` | Permite revisar localmente la versión de producción después de compilarla. |
 
 El sitio está desarrollado con **React**, **React Router**, **Vite** y **Tailwind CSS**.
+
+## Organización del código
+
+| Carpeta | Responsabilidad |
+| --- | --- |
+| `src/pages` | Compone las pantallas y conecta los componentes con sus datos. |
+| `src/components` | Controles y bloques de presentación reutilizables. `CartLine` presenta una reserva y `CartSummary` muestra el total y los controles generales. |
+| `src/hooks` | Comportamientos de interfaz. `useCartActions` coordina las acciones del carrito y sus mensajes de confirmación, anunciados en el `role="status"` de la página. |
+| `src/context` | Comparte el estado y persiste inventario y carrito conjuntamente. |
+| `src/data` | Datos, validación, reducer y restauración. `demoInventory.js` define los ejemplos; `inventoryState.js` decide cuándo cargarlos y protege las reservas. |
+| `src/layout` y `src/config` | Estructuras de navegación y configuración de rutas. |
+
+## Criterios de estilos
+
+Se mantienen dos enfoques con responsabilidades definidas:
+
+| Ubicación | Cuándo usarla |
+| --- | --- |
+| `src/styles/global.css` | Variables compartidas de color, tipografía, estilos base, foco visible y movimiento reducido. Los colores nuevos se definen aquí y se reutilizan mediante `var(...)`. |
+| `src/styles/tailwind.css` | Mapea las variables globales en `@theme` y define patrones reutilizados en gestión, como `surface-card`, `button-primary` y `quantity-button`, dentro de `@layer components`. |
+| Utilidades Tailwind en JSX | Espaciado, distribución, tipografía y adaptación de inventario, formulario, detalle y carrito. Se reutilizan los patrones anteriores para controles compartidos. |
+| Archivos `*.module.css` | Composición visual del sitio público y del layout compartido. Sus reglas quedan junto al componente correspondiente y usan las variables globales. |
+
+Al modificar un componente, se sigue el enfoque de su área. Una misma propiedad de un elemento se define en un solo enfoque, evitando competir entre una utilidad y un módulo. Si un bloque de estilos y marcado se repite, se extrae un componente; si solo se repite un patrón visual de gestión, se añade a la capa de componentes de Tailwind.
+
+Tailwind se importa sin Preflight para conservar los estilos base del sitio. Las capas siguen el orden `theme`, `base`, `components`, `utilities`; los módulos actuales no tienen capa y prevalecen frente a reglas en capas, por lo que conviene evitar mezclarlos con utilidades sobre el mismo elemento. El sitio público utiliza su adaptación a 700 px y gestión utiliza las variantes de Tailwind, como `sm:`; cada área conserva sus puntos de adaptación.
+
+Todo control conserva su foco visible, sus estados desactivados y una superficie cómoda para interactuar. Después de cambiar estilos, se revisan la vista móvil, el escritorio y la navegación con teclado.
